@@ -1,417 +1,352 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="scroll-smooth">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Prebrief | Know what changed before you meet</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-<style>
-:root {
-  --bg: #f8fafc;
-  --card: #ffffff;
-  --ink: #0f172a;
-  --mut: #64748b;
-  --line: #e2e8f0;
-  --acc: #4f46e5;
-  --acc-hover: #4338ca;
-  --ok: #059669;
-  --okbg: #d1fae5;
-  --warn: #d97706;
-  --warnbg: #fef3c7;
-  --err: #dc2626;
-  --radius: 12px;
-  --shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
-  --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
-}
-
-* { box-sizing: border-box; }
-[hidden] { display: none !important; }
-
-body {
-  margin: 0;
-  background: var(--bg);
-  color: var(--ink);
-  font-family: 'Inter', system-ui, sans-serif;
-  line-height: 1.6;
-  -webkit-font-smoothing: antialiased;
-}
-
-a { color: var(--acc); text-decoration: none; font-weight: 500; }
-a:hover { text-decoration: underline; }
-button, input, select { font-family: inherit; font-size: inherit; }
-:focus-visible { outline: 3px solid var(--acc); outline-offset: 2px; }
-
-/* Header */
-.top {
-  display: flex; justify-content: space-between; align-items: center;
-  max-width: 1000px; margin: 0 auto; padding: 24px 20px;
-}
-.brand {
-  font-size: 1.5rem; font-weight: 700; letter-spacing: -0.02em; color: var(--ink);
-  display: flex; align-items: center; gap: 8px;
-}
-.brand::before {
-  content: ""; display: inline-block; width: 24px; height: 24px;
-  background: var(--acc); border-radius: 6px;
-}
-
-main { max-width: 1000px; margin: 0 auto; padding: 0 20px 80px; }
-
-/* Landing / Form */
-.intro {
-  max-width: 800px; margin: 40px auto; background: var(--card);
-  padding: 40px; border-radius: var(--radius); box-shadow: var(--shadow-lg);
-  border: 1px solid var(--line); text-align: center;
-}
-.sentence {
-  font-size: 1.25rem; font-weight: 500; color: var(--mut); margin: 0 0 24px;
-  display: flex; flex-wrap: wrap; justify-content: center; align-items: center; gap: 10px;
-}
-.sentence input, .sentence select {
-  font-weight: 600; color: var(--ink); background: var(--bg);
-  border: 1px solid var(--line); border-radius: 8px; padding: 10px 16px;
-  transition: all 0.2s;
-}
-.sentence input:hover, .sentence select:hover { border-color: #cbd5e1; }
-.sentence input:focus, .sentence select:focus { border-color: var(--acc); background: #fff; box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.1); outline: none; }
-.sentence input[type=text] { width: 200px; text-align: center; }
-.sentence input[type=datetime-local] { width: 220px; }
-
-.go {
-  background: var(--acc); color: #fff; border: 0; border-radius: 8px;
-  padding: 14px 32px; font-weight: 600; font-size: 1.1rem; cursor: pointer;
-  transition: all 0.2s; box-shadow: var(--shadow);
-}
-.go:hover { background: var(--acc-hover); transform: translateY(-1px); }
-.go:disabled { opacity: 0.7; cursor: wait; transform: none; }
-
-.err { color: var(--err); font-size: 0.9rem; font-weight: 500; min-height: 1.4em; margin-top: 16px; }
-.try { margin-top: 24px; font-size: 0.95rem; color: var(--mut); }
-.try button {
-  background: var(--bg); border: 1px solid var(--line); color: var(--ink);
-  border-radius: 20px; padding: 4px 12px; margin: 0 4px; font-size: 0.85rem; font-weight: 500;
-  cursor: pointer; transition: all 0.2s;
-}
-.try button:hover { background: var(--line); }
-
-.facts {
-  display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px;
-  max-width: 800px; margin: 40px auto 0;
-}
-.facts div {
-  background: var(--card); padding: 24px; border-radius: var(--radius);
-  border: 1px solid var(--line); box-shadow: var(--shadow);
-}
-.facts b { display: block; font-size: 1.05rem; color: var(--ink); margin-bottom: 8px; }
-.facts p { margin: 0; color: var(--mut); font-size: 0.9rem; line-height: 1.5; }
-
-/* Alerts */
-.alert {
-  padding: 16px 20px; border-radius: var(--radius); margin: 24px 0;
-  background: var(--warnbg); color: var(--warn); font-weight: 500;
-  border: 1px solid #fde68a; display: flex; align-items: center; gap: 12px;
-}
-.alert.bad { background: #fef2f2; color: var(--err); border-color: #fecaca; }
-.alert button { margin-left: auto; }
-
-/* Loading State */
-.load { max-width: 500px; padding: 60px 0; margin: 0 auto; text-align: center; }
-.load h2 { font-size: 1.5rem; margin-bottom: 32px; }
-.stages { list-style: none; margin: 0; padding: 0; text-align: left; }
-.stages li {
-  padding: 16px 0 16px 40px; position: relative; color: var(--mut); font-weight: 500;
-  border-left: 2px solid var(--line); margin-left: 20px; transition: all 0.3s;
-}
-.stages li:before {
-  content: ""; position: absolute; left: -11px; top: 20px; width: 20px; height: 20px;
-  border-radius: 50%; background: var(--bg); border: 2px solid var(--line); transition: all 0.3s;
-}
-.stages li.on { color: var(--acc); font-weight: 600; }
-.stages li.on:before { border-color: var(--acc); background: var(--acc); box-shadow: 0 0 0 4px rgba(79, 70, 229, 0.2); }
-.stages li.done { color: var(--ink); }
-.stages li.done:before { background: var(--ok); border-color: var(--ok); content: "✓"; color: #fff; display: flex; align-items: center; justify-content: center; font-size: 12px; }
-
-/* Briefing Output */
-.sheet {
-  background: var(--card); border-radius: var(--radius); box-shadow: var(--shadow-lg);
-  border: 1px solid var(--line); margin-top: 24px; padding: 40px;
-}
-.bar { display: flex; gap: 12px; justify-content: flex-end; margin-bottom: 32px; flex-wrap: wrap; }
-.btn {
-  background: #fff; border: 1px solid var(--line); border-radius: 8px;
-  padding: 10px 16px; cursor: pointer; font-weight: 600; font-size: 0.9rem;
-  color: var(--ink); transition: all 0.2s; box-shadow: var(--shadow);
-}
-.btn:hover { background: var(--bg); border-color: #cbd5e1; }
-.btn.p { background: var(--acc); border-color: var(--acc); color: #fff; }
-.btn.p:hover { background: var(--acc-hover); }
-
-.head { margin-bottom: 32px; }
-.head h1 { font-size: 2.5rem; font-weight: 700; margin: 0 0 8px; letter-spacing: -0.03em; }
-.meta { color: var(--mut); margin: 4px 0; font-size: 0.95rem; }
-.tally { display: flex; gap: 12px; margin-top: 16px; flex-wrap: wrap; }
-.tally span {
-  padding: 6px 14px; border-radius: 20px; font-size: 0.85rem; font-weight: 600;
-  background: var(--bg); color: var(--mut); border: 1px solid var(--line);
-}
-.tally .v { background: var(--okbg); color: var(--ok); border-color: #a7f3d0; }
-.tally .u { background: var(--warnbg); color: var(--warn); border-color: #fde68a; }
-
-h2 { font-size: 1.25rem; font-weight: 700; margin: 40px 0 16px; border-bottom: 2px solid var(--line); padding-bottom: 8px; }
-.snap { font-size: 1.15rem; line-height: 1.7; margin: 0; color: var(--ink); }
-.cites a { font-size: 0.75em; vertical-align: super; text-decoration: none; font-weight: 700; padding: 0 2px; color: var(--acc); }
-
-/* Developments */
-.dev { display: grid; grid-template-columns: 120px 1fr 240px; gap: 24px; padding: 20px 0; border-bottom: 1px solid var(--line); }
-.dev:last-child { border-bottom: none; }
-.dev .when { color: var(--mut); font-size: 0.9rem; }
-.dev .when b { display: block; color: var(--ink); text-transform: capitalize; font-size: 0.95rem; margin-bottom: 4px; }
-.claim { border-left: 4px solid var(--ok); padding-left: 20px; }
-.claim.u { border-left: 4px dashed var(--warn); }
-.claim p { margin: 0 0 8px; font-size: 1.05rem; font-weight: 500; color: var(--ink); }
-.st { font-size: 0.85rem; font-weight: 700; color: var(--ok); }
-.u .st { color: var(--warn); }
-.note { display: block; color: var(--mut); font-size: 0.9rem; margin-top: 4px; font-style: italic; }
-.margin { font-size: 0.85rem; color: var(--mut); align-self: start; }
-.margin a { display: block; margin-bottom: 8px; text-decoration: none; color: var(--mut); }
-.margin a b { display: block; color: var(--acc); text-decoration: underline; font-weight: 600; margin-bottom: 2px; }
-.margin a:hover { color: var(--ink); }
-
-/* Lists & Sources */
-.cols { display: grid; grid-template-columns: 1fr 1fr; gap: 40px; }
-ul.l, ol { padding-left: 24px; margin: 0; }
-ul.l li, ol li { margin-bottom: 12px; color: var(--ink); font-size: 1rem; }
-.src li { margin-bottom: 8px; padding: 8px; border-radius: 6px; transition: background 0.2s; }
-.src li.flash { background: #fef08a; }
-
-.route {
-  margin-top: 48px; padding: 20px; background: var(--bg); border-radius: var(--radius);
-  font-size: 0.9rem; color: var(--mut); border: 1px solid var(--line);
-}
-.route b { color: var(--ink); }
-.foot { margin-top: 40px; text-align: center; color: var(--mut); font-size: 0.9rem; }
-
-@media(max-width: 820px) {
-  .facts, .cols { grid-template-columns: 1fr; }
-  .dev { grid-template-columns: 1fr; gap: 12px; }
-  .dev .when { display: flex; gap: 8px; align-items: center; }
-  .dev .when b { margin-bottom: 0; }
-  .intro { padding: 24px; }
-  .sentence { flex-direction: column; }
-  .sentence input[type=text], .sentence input[type=datetime-local] { width: 100%; }
-}
-
-@page { size: A4; margin: 15mm; }
-@media print {
-  body { background: #fff; font-size: 10pt; }
-  .noprint { display: none !important; }
-  .sheet { border: 0; padding: 0; margin: 0; box-shadow: none; }
-  main, .top { max-width: none; padding: 0; }
-  .dev { grid-template-columns: 100px 1fr 200px; break-inside: avoid; padding: 10px 0; }
-  .head h1 { font-size: 24pt; }
-  h2 { margin: 20px 0 10px; }
-}
-</style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Prebrief AI | Next-Gen Meeting Intel</title>
+    <!-- Tailwind CSS via CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: { sans: ['Inter', 'sans-serif'] },
+                    colors: {
+                        brand: { 500: '#6366f1', 600: '#4f46e5' },
+                        dark: { 900: '#0f172a', 950: '#020617' }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body { font-family: 'Inter', sans-serif; background-color: #020617; color: #f8fafc; }
+        .glow-text { text-shadow: 0 0 40px rgba(99, 102, 241, 0.5); }
+        .glass { background: rgba(15, 23, 42, 0.6); backdrop-filter: blur(12px); border: 1px solid rgba(255, 255, 255, 0.1); }
+        .glass-card { background: rgba(30, 41, 59, 0.4); backdrop-filter: blur(8px); border: 1px solid rgba(255, 255, 255, 0.05); }
+        .glow-bg { position: absolute; width: 600px; height: 600px; background: radial-gradient(circle, rgba(99, 102, 241, 0.15) 0%, rgba(2, 6, 23, 0) 70%); top: -200px; left: 50%; transform: translateX(-50%); z-index: -1; pointer-events: none; }
+        .loader-pulse { animation: pulse 1.5s cubic-bezier(0.4, 0, 0.6, 1) infinite; }
+        @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: .5; } }
+    </style>
 </head>
-<body>
-<header class="top noprint">
-  <span class="brand">Prebrief</span>
-</header>
-<noscript><p style="padding:20px">Prebrief needs JavaScript. Turn it on in your browser and reload.</p></noscript>
-<main>
-<section id="home" class="noprint">
- <div class="intro">
-  <div id="form">
-   <p class="sentence">Brief me on 
-     <input id="name" type="text" placeholder="e.g. Stripe" aria-label="Company or person" autocomplete="off">
-     (<select id="etype" aria-label="Type"><option value="company">company</option><option value="person">person</option></select>)
-     before my <select id="mtype" aria-label="Meeting type"></select> on 
-     <input id="time" type="datetime-local" aria-label="Meeting date and time">.
-   </p>
-   <p class="err" id="err" role="alert"></p>
-   <button class="go" id="go" type="button">Build my briefing</button>
-   <p class="try">Try: <button type="button" data-n="Stripe" data-t="company">Stripe</button><button type="button" data-n="Google" data-t="company">Google</button><button type="button" data-n="Satya Nadella" data-t="person">Satya Nadella</button></p>
-  </div>
-  <div id="bad" class="alert bad" role="alert" hidden><span id="badtxt"></span><button class="btn" id="retry" type="button">Try again</button></div>
- </div>
- <div class="facts">
-  <div><b>Last 30 days only</b><p>Live web search for launches, hires, funding and news.</p></div>
-  <div><b>Every claim has a source</b><p>Sources sit next to each fact. Nothing is cited that was not found.</p></div>
-  <div><b>Verified or uncertain</b><p>A fact is verified only when two independent sites or an official one confirm it.</p></div>
- </div>
-</section>
+<body class="min-h-screen relative overflow-x-hidden">
 
-<section id="load" class="load" hidden aria-live="polite">
-  <h2>Building your briefing...</h2>
-  <ol class="stages" id="stages"></ol>
-</section>
+    <div class="glow-bg"></div>
 
-<article id="out" class="sheet" hidden></article>
+    <div class="max-w-6xl mx-auto px-4 py-8 md:py-16">
+        
+        <!-- Header -->
+        <header class="flex justify-between items-center mb-16">
+            <div class="flex items-center gap-3">
+                <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-brand-600 to-purple-500 flex items-center justify-center shadow-lg shadow-brand-500/30">
+                    <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
+                </div>
+                <span class="text-2xl font-bold tracking-tight">Prebrief<span class="text-brand-500">.ai</span></span>
+            </div>
+            <div class="hidden md:flex items-center gap-2 text-sm font-medium text-slate-400 bg-slate-800/50 py-1 px-3 rounded-full border border-slate-700">
+                <span class="w-2 h-2 rounded-full bg-green-500 animate-pulse"></span> Bifrost + Tavily Active
+            </div>
+        </header>
 
-<p class="foot noprint">Powered by Tavily + Bifrost. Built by Syntax Dynasty for the Global AI Hackathon 2026.</p>
-</main>
-<script>
-// Show any script error on screen instead of failing silently
-window.addEventListener("error", (e) => { const b = document.createElement("div"); b.style.cssText = "position:fixed;left:0;right:0;bottom:0;background:#dc2626;color:#fff;padding:12px;z-index:9;text-align:center;font-weight:600;"; b.textContent = "Page error: " + e.message; document.body.appendChild(b); });
-// ===== SETTINGS =====
-const API_BASE = location.protocol === "file:" ? "http://localhost:8000" : "";
-const TIMEOUT_MS = 120000;
-const TYPES = [["sales","sales call"],["investor","investor meeting"],["partnership","partnership talk"],["interview","interview"],["general","general meeting"]];
-// ===== helpers =====
-const $ = (id) => document.getElementById(id);
-function h(tag, attrs, ...kids) {
-  const n = document.createElement(tag);
-  for (const [k, v] of Object.entries(attrs || {})) {
-    if (k === "class") n.className = v;
-    else if (k.startsWith("on")) n.addEventListener(k.slice(2), v);
-    else if (v !== false && v != null) n.setAttribute(k, v);
-  }
-  kids.flat().forEach((c) => { if (c != null && c !== false) n.append(c.nodeType ? c : document.createTextNode(String(c))); });
-  return n;
-}
-const safeUrl = (u) => { try { const x = new URL(u); return /^https?:$/.test(x.protocol) ? x.href : "#"; } catch { return "#"; } };
-const host = (u) => { try { return new URL(u).hostname.replace(/^www\./, ""); } catch { return ""; } };
-const fmt = (d) => d ? new Date(d + "T00:00:00").toLocaleDateString(undefined, { day: "numeric", month: "short", year: "numeric" }) : "Date unknown";
-const ids = (v) => (Array.isArray(v) ? v : []).map((x) => Number(x && x.id != null ? x.id : x)).filter(Number.isFinite);
-const claims = (v) => (Array.isArray(v) ? v : []).map((x) => typeof x === "string" ? { text: x, ids: [] } : { text: x && x.text, ids: ids(x && x.source_ids) }).filter((x) => x.text);
+        <!-- Input Section -->
+        <section id="input-section" class="max-w-3xl mx-auto text-center transition-all duration-500">
+            <h1 class="text-4xl md:text-6xl font-extrabold tracking-tight mb-6 glow-text">
+                Know what changed <br>
+                <span class="text-transparent bg-clip-text bg-gradient-to-r from-brand-500 to-purple-400">before you meet.</span>
+            </h1>
+            <p class="text-lg text-slate-400 mb-10">AI-powered intelligence briefings for your next big conversation.</p>
 
-function normalize(raw, p) {
-  if (!raw || typeof raw !== "object") throw new Error("The server sent a reply the page cannot read.");
-  const items = raw.key_developments || raw.developments;
-  if (!Array.isArray(items)) throw new Error("The reply has no key_developments list.");
-  const e = typeof raw.entity === "string" ? { name: raw.entity } : raw.entity || {}, m = raw.meeting || {};
-  return {
-    name: e.name || p.name, note: e.disambiguation_note || "", desc: e.description || "",
-    time: m.time || p.meeting_time, type: m.type || p.meeting_type,
-    win: m.window_start && m.window_end ? [m.window_start, m.window_end] : (raw.window ? [raw.window.start, raw.window.end] : null),
-    snapshot: raw.snapshot || "", snapIds: ids(raw.snapshot_source_ids),
-    devs: items.map((d) => {
-      const c = String(d.confidence || "").toLowerCase();
-      return { date: d.date || null, cat: d.category || "update", text: d.text || "", ok: ["verified", "high"].includes(c) && !!d.date, ids: ids(d.source_ids), note: d.note || "" };
-    }),
-    tp: claims(raw.talking_points), risks: claims(raw.risks),
-    qs: (raw.questions || []).map((q) => typeof q === "string" ? q : q && q.text).filter(Boolean),
-    src: (raw.sources || []).map((s, i) => ({ id: Number(s.id) || i + 1, title: s.title || s.url || "Source", url: s.url || "", date: s.published_date || null, domain: s.domain || host(s.url) })),
-    meta: raw.meta || {},
-  };
-}
+            <form id="briefing-form" class="glass p-6 md:p-8 rounded-2xl shadow-2xl space-y-6 text-left">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div>
+                        <label class="block text-sm font-medium text-slate-300 mb-2">Who are you meeting?</label>
+                        <input type="text" id="name" required placeholder="e.g. Google, Stripe, Satya Nadella"
+                            class="w-full bg-slate-900/50 border border-slate-700 rounded-xl px-4 py-3 text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-transparent transition-all">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-slate-300 mb-2">Entity Type</label>
+                        <select id="entity_type" class="w-full bg-slate-900/50 border border-slate-700 rounded-xl px-4 py-3 text-white focus:outline-none focus:ring-2 focus:ring-brand-500 appearance-none">
+                            <option value="company">Company</option>
+                            <option value="person">Person</option>
+                        </select>
+                    </div>
+                </div>
 
-function show(v) {
-  $("home").hidden = !(v === "home" || v === "bad");
-  $("load").hidden = v !== "load";
-  $("out").hidden = v !== "out";
-  $("bad").hidden = v !== "bad";
-  $("form").hidden = v === "load";
-}
-let timer = null, tick = null, last = null;
-function startLoad(fast) {
-  const names = ["Searching the last 30 days", "Reading the sources", "Checking each claim", "Writing your briefing"];
-  const ol = $("stages"); ol.replaceChildren(...names.map((n) => h("li", null, n)));
-  let i = 0; const set = () => [...ol.children].forEach((li, k) => { li.className = k < i ? "done" : k === i ? "on" : ""; });
-  set(); show("load"); $("go").disabled = true;
-  timer = setInterval(() => { i = Math.min(i + 1, names.length - 1); set(); }, fast ? 900 : 4000);
-}
-const stopLoad = () => { clearInterval(timer); $("go").disabled = false; };
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div>
+                        <label class="block text-sm font-medium text-slate-300 mb-2">Meeting Context</label>
+                        <select id="meeting_type" class="w-full bg-slate-900/50 border border-slate-700 rounded-xl px-4 py-3 text-white focus:outline-none focus:ring-2 focus:ring-brand-500 appearance-none">
+                            <option value="sales">Sales Call</option>
+                            <option value="investor">Investor Pitch</option>
+                            <option value="partnership">Partnership</option>
+                            <option value="interview">Interview</option>
+                            <option value="general">General Meeting</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-slate-300 mb-2">Date & Time</label>
+                        <input type="datetime-local" id="meeting_time" required
+                            class="w-full bg-slate-900/50 border border-slate-700 rounded-xl px-4 py-3 text-white focus:outline-none focus:ring-2 focus:ring-brand-500">
+                    </div>
+                </div>
 
-async function getBriefing(p) {
-  const ctl = new AbortController(), t = setTimeout(() => ctl.abort(), TIMEOUT_MS);
-  try {
-    const r = await fetch(API_BASE + "/generate", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(p), signal: ctl.signal });
-    if (!r.ok) throw new Error(r.status >= 500 ? "The server had a problem. Try again in a moment." : "The request was not accepted (" + r.status + "). Check the name and time.");
-    return normalize(await r.json(), p);
-  } catch (e) {
-    if (e.name === "AbortError") throw new Error("This took too long. Try again.");
-    if (e instanceof TypeError) throw new Error("Cannot reach the server. Check that the API is running and the address is right.");
-    throw e;
-  } finally { clearTimeout(t); }
-}
+                <button type="submit" id="submit-btn"
+                    class="w-full py-4 bg-brand-600 hover:bg-brand-500 text-white font-semibold rounded-xl transition-all shadow-[0_0_20px_rgba(99,102,241,0.3)] hover:shadow-[0_0_30px_rgba(99,102,241,0.6)] flex justify-center items-center gap-2">
+                    <span>Generate Briefing</span>
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
+                </button>
+            </form>
 
-function jump(id) {
-  const li = $("s-" + id); if (!li) return;
-  li.scrollIntoView({ behavior: "smooth", block: "center" });
-  li.classList.add("flash"); setTimeout(() => li.classList.remove("flash"), 1800);
-}
-const cites = (list) => h("span", { class: "cites" }, list.map((n) => h("a", { role: "button", tabindex: "0", "aria-label": "Show source " + n, onclick: () => jump(n), onkeydown: (e) => { if (e.key === "Enter") jump(n); } }, n)));
-const withCites = (text, list) => h("span", null, text, " ", cites(list));
+            <!-- Quick Try Buttons -->
+            <div class="mt-6 flex flex-wrap justify-center gap-3 text-sm">
+                <span class="text-slate-500 py-1">Try:</span>
+                <button onclick="fillForm('Stripe', 'company')" class="px-3 py-1 rounded-full border border-slate-700 hover:border-brand-500 hover:text-brand-400 transition-colors">Stripe</button>
+                <button onclick="fillForm('Google', 'company')" class="px-3 py-1 rounded-full border border-slate-700 hover:border-brand-500 hover:text-brand-400 transition-colors">Google</button>
+                <button onclick="fillForm('Satya Nadella', 'person')" class="px-3 py-1 rounded-full border border-slate-700 hover:border-brand-500 hover:text-brand-400 transition-colors">Satya Nadella</button>
+            </div>
+        </section>
 
-function countdown(node, iso) {
-  const ms = new Date(iso) - new Date();
-  if (isNaN(ms)) return node.textContent = "";
-  if (ms <= 0) return node.textContent = "Meeting has started";
-  const m = Math.floor(ms / 60000);
-  node.textContent = "Starts in " + (m >= 1440 ? Math.floor(m / 1440) + " d " : "") + Math.floor((m % 1440) / 60) + " h " + (m % 60) + " min";
-}
+        <!-- Loading State -->
+        <section id="loading-section" class="hidden max-w-lg mx-auto text-center py-20">
+            <div class="relative w-24 h-24 mx-auto mb-8">
+                <div class="absolute inset-0 border-4 border-slate-800 rounded-full"></div>
+                <div class="absolute inset-0 border-4 border-brand-500 rounded-full border-t-transparent animate-spin"></div>
+                <div class="absolute inset-0 flex items-center justify-center text-brand-500 loader-pulse">
+                    <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z"></path></svg>
+                </div>
+            </div>
+            <h2 class="text-2xl font-bold mb-4">Synthesizing Intelligence...</h2>
+            <ul class="text-slate-400 space-y-3 font-medium">
+                <li id="step-1" class="text-brand-400">• Searching Tavily (Last 30 days)</li>
+                <li id="step-2">• Reading & verifying sources</li>
+                <li id="step-3">• Routing via Bifrost</li>
+                <li id="step-4">• Generating briefing with LLM</li>
+            </ul>
+        </section>
 
-function plain(d) {
-  const L = [d.name + " | pre-meeting briefing", "", d.snapshot, "", "KEY DEVELOPMENTS"];
-  d.devs.forEach((x) => L.push("- " + fmt(x.date) + " (" + (x.ok ? "verified" : "uncertain") + "): " + x.text));
-  L.push("", "TALKING POINTS", ...d.tp.map((x) => "- " + x.text), "", "RISKS", ...d.risks.map((x) => "- " + x.text), "", "QUESTIONS", ...d.qs.map((q) => "- " + q), "", "SOURCES", ...d.src.map((s) => s.id + ". " + s.title + " " + s.url));
-  return L.join("\n");
-}
+        <!-- Results Section -->
+        <section id="results-section" class="hidden max-w-5xl mx-auto">
+            <!-- Action Bar -->
+            <div class="flex justify-between items-center mb-8">
+                <button id="new-btn" class="px-4 py-2 rounded-lg bg-slate-800 hover:bg-slate-700 text-sm font-medium transition-colors flex items-center gap-2">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path></svg>
+                    New Search
+                </button>
+                <button id="print-btn" class="px-4 py-2 rounded-lg bg-brand-600 hover:bg-brand-500 text-sm font-medium transition-colors flex items-center gap-2">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z"></path></svg>
+                    Save PDF
+                </button>
+            </div>
 
-function render(d) {
-  const root = $("out"); root.replaceChildren(); clearInterval(tick);
-  const nv = d.devs.filter((x) => x.ok).length, byId = Object.fromEntries(d.src.map((s) => [s.id, s]));
-  const copy = h("button", { class: "btn", type: "button", onclick: async () => { try { await navigator.clipboard.writeText(plain(d)); copy.textContent = "Copied!"; } catch { copy.textContent = "Copy failed"; } setTimeout(() => copy.textContent = "Copy as text", 1600); } }, "Copy as text");
-  root.append(h("div", { class: "bar noprint" }, h("button", { class: "btn", type: "button", onclick: () => { clearInterval(tick); show("home"); } }, "New briefing"), copy, h("button", { class: "btn p", type: "button", onclick: () => window.print() }, "Save as PDF")));
+            <!-- Main Briefing Document -->
+            <div class="glass rounded-3xl p-6 md:p-10 shadow-2xl">
+                <!-- Document Header -->
+                <div class="border-b border-slate-700/50 pb-8 mb-8">
+                    <div class="flex flex-col md:flex-row justify-between items-start md:items-end gap-4">
+                        <div>
+                            <h1 id="res-entity" class="text-4xl md:text-5xl font-bold tracking-tight text-white mb-2"></h1>
+                            <p id="res-meta" class="text-slate-400 font-medium"></p>
+                        </div>
+                        <div class="flex gap-3">
+                            <span id="res-verified" class="px-3 py-1.5 rounded-full bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 text-sm font-semibold"></span>
+                            <span id="res-uncertain" class="px-3 py-1.5 rounded-full bg-amber-500/10 text-amber-400 border border-amber-500/20 text-sm font-semibold"></span>
+                        </div>
+                    </div>
+                </div>
 
-  const when = h("span"), t = new Date(d.time);
-  root.append(h("header", { class: "head" }, h("h1", null, d.name),
-    d.desc && h("p", { class: "meta" }, d.desc),
-    h("p", { class: "meta" }, isNaN(t) ? "Meeting time not set" : t.toLocaleString(undefined, { dateStyle: "full", timeStyle: "short" }) + " (" + d.type + "). ", when),
-    d.win && h("p", { class: "meta" }, "Covers " + fmt(d.win[0]) + " to " + fmt(d.win[1])),
-    h("p", { class: "tally" }, h("span", { class: "v" }, nv + " verified"), h("span", { class: "u" }, (d.devs.length - nv) + " uncertain"), h("span", null, d.src.length + " sources"))));
-  countdown(when, d.time); tick = setInterval(() => countdown(when, d.time), 60000);
+                <!-- Snapshot -->
+                <div class="mb-10">
+                    <h2 class="text-sm font-bold text-brand-500 uppercase tracking-wider mb-3">Snapshot</h2>
+                    <p id="res-snapshot" class="text-xl text-slate-200 leading-relaxed font-light"></p>
+                </div>
 
-  if (d.note) root.append(h("div", { class: "alert", role: "note" }, "Check the match: " + d.note));
-  if (d.meta.notes) root.append(h("div", { class: "alert", role: "note" }, "Note: " + d.meta.notes));
+                <!-- Key Developments -->
+                <div class="mb-10">
+                    <h2 class="text-sm font-bold text-brand-500 uppercase tracking-wider mb-4">Key Developments</h2>
+                    <div id="res-devs" class="space-y-4"></div>
+                </div>
 
-  root.append(h("h2", null, "Snapshot"), h("p", { class: "snap" }, d.snapshot ? withCites(d.snapshot, d.snapIds) : "No summary available."));
+                <!-- Two Column Layout: Talking Points & Risks -->
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-10">
+                    <div>
+                        <h2 class="text-sm font-bold text-brand-500 uppercase tracking-wider mb-4">Talking Points</h2>
+                        <ul id="res-tp" class="space-y-3 text-slate-300"></ul>
+                    </div>
+                    <div>
+                        <h2 class="text-sm font-bold text-red-400 uppercase tracking-wider mb-4">Risks & Objections</h2>
+                        <ul id="res-risks" class="space-y-3 text-slate-300"></ul>
+                    </div>
+                </div>
 
-  root.append(h("h2", null, "What changed"));
-  if (!d.devs.length) root.append(h("p", { class: "meta" }, "No supported developments were found for this window. Try a more specific name."));
-  [...d.devs].sort((a, b) => (b.date || "").localeCompare(a.date || "")).forEach((x) => root.append(
-    h("div", { class: "dev" },
-      h("div", { class: "when" }, h("b", null, x.cat), fmt(x.date)),
-      h("div", { class: "claim" + (x.ok ? "" : " u") }, h("p", null, x.text), h("span", { class: "st" }, x.ok ? "✓ Verified" : "? Uncertain"),
-        x.note && h("span", { class: "note" }, x.note)),
-      h("div", { class: "margin" }, x.ids.map((n) => byId[n] && h("a", { href: safeUrl(byId[n].url), target: "_blank", rel: "noopener noreferrer" }, h("b", null, n + ". " + (byId[n].domain || host(byId[n].url))), byId[n].title))))));
+                <!-- Questions -->
+                <div class="mb-10">
+                    <h2 class="text-sm font-bold text-brand-500 uppercase tracking-wider mb-4">Questions to Ask</h2>
+                    <ol id="res-questions" class="space-y-3 text-slate-300 list-decimal list-inside marker:text-brand-500"></ol>
+                </div>
 
-  const list = (title, arr) => arr.length ? h("section", null, h("h2", null, title), h("ul", { class: "l" }, arr.map((c) => h("li", null, c.ids && c.ids.length ? withCites(c.text, c.ids) : c.text)))) : null;
-  const two = h("div", { class: "cols" }, list("Talking points", d.tp), list("Risks", d.risks));
-  if (two.children.length) root.append(two);
-  const q = list("Questions to ask", d.qs.map((x) => ({ text: x }))); if (q) root.append(q);
+                <!-- Sources -->
+                <div class="border-t border-slate-700/50 pt-8">
+                    <h2 class="text-sm font-bold text-slate-400 uppercase tracking-wider mb-4">Verified Sources</h2>
+                    <ul id="res-sources" class="grid grid-cols-1 md:grid-cols-2 gap-3 text-sm"></ul>
+                </div>
 
-  root.append(h("h2", null, "All sources"), h("ol", { class: "src" }, d.src.map((s) => h("li", { id: "s-" + s.id, value: s.id },
-    h("a", { href: safeUrl(s.url), target: "_blank", rel: "noopener noreferrer" }, s.title), " ", h("span", { class: "meta" }, (s.domain ? s.domain + ", " : "") + (s.date ? fmt(s.date) : "no date"))))));
+                <!-- Footer -->
+                <div class="mt-8 pt-6 border-t border-slate-700/50 flex flex-wrap justify-between text-xs text-slate-500 font-medium">
+                    <span id="res-provider"></span>
+                    <span>Prebrief.ai © 2026</span>
+                </div>
+            </div>
+        </section>
 
-  const m = d.meta, models = Array.isArray(m.models_used) && m.models_used.length ? m.models_used.join(", ") : m.provider_used || "unknown";
-  root.append(h("p", { class: "route" }, "Written by ", h("b", null, models), " through Bifrost", m.latency_seconds != null ? " in " + m.latency_seconds + " s" : "", ". ",
-    m.fallback_used ? h("span", { class: "fb" }, "Fallback model used: the primary model failed and Bifrost switched automatically.") : "Fallback was not needed.", " Search by Tavily."));
-  show("out"); window.scrollTo(0, 0);
-}
+    </div>
 
-TYPES.forEach(([v, l]) => $("mtype").append(h("option", { value: v }, l)));
-(() => { const t = new Date(Date.now() + 86400000); t.setHours(10, 0, 0, 0); $("time").value = new Date(t - t.getTimezoneOffset() * 60000).toISOString().slice(0, 16); })();
-document.querySelectorAll(".try button").forEach((b) => b.addEventListener("click", () => { $("name").value = b.dataset.n; $("etype").value = b.dataset.t; }));
+    <script>
+        const API_BASE = location.protocol === "file:" ? "http://localhost:8000" : "";
+        
+        // Form fill helper
+        function fillForm(name, type) {
+            document.getElementById('name').value = name;
+            document.getElementById('entity_type').value = type;
+        }
 
-async function run(p) {
-  startLoad();
-  try { const d = await getBriefing(p); stopLoad(); render(d); }
-  catch (e) { stopLoad(); $("badtxt").textContent = e.message; show("bad"); }
-}
-function submit() {
-  const n = $("name").value.trim(), t = new Date($("time").value);
-  $("err").textContent = n.length < 2 ? "Enter a company or person name (2+ characters)." : isNaN(t) ? "Pick the meeting date and time." : t < new Date() ? "Pick a time in the future." : "";
-  if ($("err").textContent) return;
-  last = { name: n, entity_type: $("etype").value, meeting_time: t.toISOString(), meeting_type: $("mtype").value };
-  run(last);
-}
-$("go").addEventListener("click", submit);
-["name", "time"].forEach((id) => $(id).addEventListener("keydown", (e) => { if (e.key === "Enter") submit(); }));
-$("retry").addEventListener("click", () => last && run(last));
-</script>
+        // Loading Animation Logic
+        let loadInterval;
+        function startLoading() {
+            document.getElementById('input-section').classList.add('hidden');
+            document.getElementById('results-section').classList.add('hidden');
+            document.getElementById('loading-section').classList.remove('hidden');
+            
+            const steps = ['step-1', 'step-2', 'step-3', 'step-4'];
+            let current = 0;
+            steps.forEach(id => document.getElementById(id).className = "text-slate-400");
+            document.getElementById('step-1').className = "text-brand-400";
+
+            loadInterval = setInterval(() => {
+                if (current < 3) {
+                    document.getElementById(steps[current]).className = "text-slate-500 line-through";
+                    current++;
+                    document.getElementById(steps[current]).className = "text-brand-400";
+                }
+            }, 2500);
+        }
+
+        function stopLoading() {
+            clearInterval(loadInterval);
+            document.getElementById('loading-section').classList.add('hidden');
+        }
+
+        // Form Submission
+        document.getElementById('briefing-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            startLoading();
+
+            const payload = {
+                name: document.getElementById('name').value,
+                entity_type: document.getElementById('entity_type').value,
+                meeting_type: document.getElementById('meeting_type').value,
+                meeting_time: new Date(document.getElementById('meeting_time').value).toISOString()
+            };
+
+            try {
+                const res = await fetch(API_BASE + "/generate", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify(payload)
+                });
+                
+                if (!res.ok) throw new Error("Server error");
+                const data = await res.json();
+                
+                stopLoading();
+                renderResults(data);
+            } catch (err) {
+                stopLoading();
+                alert("Error: Could not connect to API or Bifrost is offline.");
+                document.getElementById('input-section').classList.remove('hidden');
+            }
+        });
+
+        // Render Results
+        function renderResults(data) {
+            document.getElementById('results-section').classList.remove('hidden');
+            
+            // Header
+            document.getElementById('res-entity').textContent = data.entity.name;
+            document.getElementById('res-meta').textContent = `${new Date(data.meeting.time).toLocaleString()} • ${data.meeting.type}`;
+            
+            const verified = data.key_developments.filter(d => d.confidence === 'verified').length;
+            const uncertain = data.key_developments.length - verified;
+            document.getElementById('res-verified').textContent = `${verified} Verified`;
+            document.getElementById('res-uncertain').textContent = `${uncertain} Uncertain`;
+            
+            // Snapshot
+            document.getElementById('res-snapshot').textContent = data.snapshot || "No summary available.";
+
+            // Developments
+            const devsDiv = document.getElementById('res-devs');
+            devsDiv.innerHTML = '';
+            data.key_developments.forEach(dev => {
+                const isVerified = dev.confidence === 'verified';
+                const borderColor = isVerified ? 'border-emerald-500' : 'border-amber-500';
+                const badgeColor = isVerified ? 'bg-emerald-500/10 text-emerald-400' : 'bg-amber-500/10 text-amber-400';
+                
+                devsDiv.innerHTML += `
+                    <div class="glass-card p-5 rounded-xl border-l-4 ${borderColor}">
+                        <div class="flex justify-between items-start mb-2">
+                            <span class="text-xs font-bold ${badgeColor} px-2 py-1 rounded">${isVerified ? 'VERIFIED' : 'UNCERTAIN'}</span>
+                            <span class="text-xs text-slate-500">${dev.date || 'Date unknown'}</span>
+                        </div>
+                        <p class="text-slate-200">${dev.text}</p>
+                        ${dev.note ? `<p class="text-sm text-slate-500 mt-2 italic">${dev.note}</p>` : ''}
+                    </div>
+                `;
+            });
+
+            // Talking Points
+            document.getElementById('res-tp').innerHTML = data.talking_points.map(tp => 
+                `<li class="flex items-start gap-2"><span class="text-brand-500 mt-1">→</span> <span>${tp.text}</span></li>`
+            ).join('');
+
+            // Risks
+            document.getElementById('res-risks').innerHTML = data.risks.map(risk => 
+                `<li class="flex items-start gap-2"><span class="text-red-500 mt-1">⚠</span> <span>${risk.text}</span></li>`
+            ).join('');
+
+            // Questions
+            document.getElementById('res-questions').innerHTML = data.questions.map(q => 
+                `<li class="pl-2">${q}</li>`
+            ).join('');
+
+            // Sources
+            document.getElementById('res-sources').innerHTML = data.sources.map(s => 
+                `<li><a href="${s.url}" target="_blank" class="block p-3 rounded-lg bg-slate-800/50 hover:bg-slate-800 transition-colors border border-slate-700/50">
+                    <span class="font-semibold text-brand-400 block truncate">${s.title}</span>
+                    <span class="text-xs text-slate-500">${s.domain} • ${s.published_date || 'No date'}</span>
+                </a></li>`
+            ).join('');
+
+            // Footer Meta
+            document.getElementById('res-provider').textContent = `Generated by ${data.meta.models_used.join(', ')} in ${data.meta.latency_seconds}s`;
+        }
+
+        // Reset
+        document.getElementById('new-btn').addEventListener('click', () => {
+            document.getElementById('results-section').classList.add('hidden');
+            document.getElementById('input-section').classList.remove('hidden');
+        });
+
+        // Print
+        document.getElementById('print-btn').addEventListener('click', () => window.print());
+
+        // Set Default Time (Tomorrow at 10 AM)
+        const now = new Date();
+        now.setDate(now.getDate() + 1);
+        now.setHours(10, 0, 0, 0);
+        document.getElementById('meeting_time').value = new Date(now - now.getTimezoneOffset() * 60000).toISOString().slice(0, 16);
+    </script>
 </body>
 </html>
