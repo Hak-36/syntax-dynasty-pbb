@@ -24,8 +24,8 @@ CACHE_TTL_SECONDS = 600
 if MOCK_MODE:
     from api.stubs import research, synthesize
 else:
-    raise RuntimeError("Real research/synthesize are not wired yet. Set MOCK_MODE=1.")
-
+        from research.pipeline import research
+        from ai_core.synthesize import synthesize
 logging.basicConfig(level=logging.INFO, format="%(message)s")
 logger = logging.getLogger("briefing")
 
