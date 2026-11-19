@@ -82,7 +82,7 @@ def run_pipeline(req: GenerateRequest):
     research_s = time.perf_counter() - t
 
     t = time.perf_counter()
-    draft = synthesize(req.name, req.entity_type, req.meeting_type, results)
+    draft = synthesize(req.name, req.entity_type, req.meeting_type, results, meeting_time=req.meeting_time)
     synth_s = time.perf_counter() - t
     return results, draft, research_s, synth_s
 
