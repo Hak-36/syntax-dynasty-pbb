@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Prebrief | Know what changed before you meet</title>
+<style>
+:root{--paper:#eef1f6;--sheet:#fff;--ink:#14213d;--mut:#5b667a;--line:#d5dbe5;--acc:#2f3fbf;--ok:#0b6e5f;--okbg:#dff3ee;--warn:#9a4a07;--warnbg:#fdecc8;--err:#b3261e;
+--serif:"Iowan Old Style","Palatino Linotype",Palatino,Georgia,serif;--sans:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+*{box-sizing:border-box}[hidden]{display:none!important}
+body{margin:0;background:var(--paper);color:var(--ink);font:16px/1.55 var(--sans)}
+a{color:var(--acc)}button,input,select{font:inherit;color:inherit}
+:focus-visible{outline:3px solid var(--acc);outline-offset:2px}
+.top{display:flex;justify-content:space-between;align-items:center;max-width:1120px;margin:0 auto;padding:18px 20px}
+.brand{font:700 1.5rem var(--serif);letter-spacing:-.01em}
+.demo{font-size:.9rem;color:var(--mut);display:flex;gap:8px;align-items:center;cursor:pointer}
+main{max-width:1120px;margin:0 auto;padding:0 20px 56px}
+.intro{max-width:860px;padding:40px 0 24px}
+.sentence{font:400 clamp(1.5rem,3.4vw,2.4rem)/1.9 var(--serif);margin:0}
+.sentence input,.sentence select{font:inherit;background:transparent;border:0;border-bottom:2px solid var(--acc);border-radius:0;padding:0 4px;color:var(--acc);max-width:100%}
+.sentence input[type=text]{width:9em}
+.sentence input[type=datetime-local]{font-size:.7em}
+.err{color:var(--err);font-size:.9rem;min-height:1.4em;margin:6px 0}
+.go{background:var(--ink);color:#fff;border:0;border-radius:6px;padding:13px 26px;font-weight:600;cursor:pointer}
+.go:disabled{opacity:.5;cursor:wait}
+.try{margin-top:16px;color:var(--mut);font-size:.95rem}
+.try button{background:none;border:0;color:var(--acc);text-decoration:underline;cursor:pointer;padding:0 6px}
+.facts{display:grid;grid-template-columns:repeat(3,1fr);gap:28px;max-width:860px;margin-top:36px;border-top:1px solid var(--line);padding-top:20px}
+.facts p{margin:4px 0 0;color:var(--mut);font-size:.95rem}
+.alert{padding:12px 14px;border-radius:6px;margin:12px 0;background:var(--warnbg);color:var(--warn);border-left:4px solid var(--warn)}
+.alert.bad{background:#fde8e6;color:var(--err);border-color:var(--err)}
+.alert button{margin-left:10px}
+.load{max-width:560px;padding:56px 0}
+.load h2{font:400 1.8rem var(--serif);margin:0 0 20px;border:0;padding:0}
+.stages{list-style:none;margin:0;padding:0}
+.stages li{padding:10px 0 10px 34px;position:relative;color:var(--mut);border-left:2px solid var(--line);margin-left:9px}
+.stages li:before{content:"";position:absolute;left:-10px;top:14px;width:18px;height:18px;border-radius:50%;background:var(--paper);border:2px solid var(--line)}
+.stages li.on{color:var(--ink);font-weight:600}.stages li.on:before{border-color:var(--acc);background:var(--acc);animation:pulse 1.2s infinite}
+.stages li.done{color:var(--ink)}.stages li.done:before{background:var(--ok);border-color:var(--ok)}
+@keyframes pulse{50%{box-shadow:0 0 0 7px rgba(47,63,191,.18)}}
+@media(prefers-reduced-motion:reduce){.stages li.on:before{animation:none}}
+.sheet{background:var(--sheet);border:1px solid var(--line);padding:36px clamp(18px,4vw,48px);margin-top:8px}
+.bar{display:flex;gap:8px;justify-content:flex-end;flex-wrap:wrap}
+.btn{background:#fff;border:1px solid var(--line);border-radius:6px;padding:8px 14px;cursor:pointer;font-weight:600}
+.btn.p{background:var(--acc);border-color:var(--acc);color:#fff}
+.head h1{font:700 clamp(2rem,5vw,3.4rem)/1.1 var(--serif);margin:8px 0 4px;letter-spacing:-.02em}
+.meta{color:var(--mut);margin:2px 0}
+.tally{display:flex;gap:18px;margin:14px 0 0;font-weight:600;flex-wrap:wrap}
+.tally .v{color:var(--ok)}.tally .u{color:var(--warn)}
+h2{font:700 1.2rem var(--serif);margin:34px 0 12px;padding-top:12px;border-top:2px solid var(--ink)}
+.snap{font:400 1.3rem/1.65 var(--serif);max-width:68ch;margin:0}
+.cites a{font-size:.72em;vertical-align:super;text-decoration:none;font-weight:700;padding:0 2px;cursor:pointer}
+.dev{display:grid;grid-template-columns:96px 1fr 270px;gap:22px;padding:16px 0;border-bottom:1px solid var(--line)}
+.dev .when{color:var(--mut);font-size:.9rem}
+.dev .when b{display:block;color:var(--ink);text-transform:capitalize}
+.claim{border-left:4px solid var(--ok);padding-left:16px}
+.claim.u{border-left:3px dashed var(--warn)}
+.claim p{margin:0 0 6px;font:400 1.1rem/1.5 var(--serif)}
+.st{font-size:.85rem;font-weight:700;color:var(--ok)}.u .st{color:var(--warn)}
+.note{display:block;color:var(--mut);font-size:.88rem;margin-top:2px}
+.margin{font-size:.85rem;color:var(--mut);align-self:start}
+.margin a{display:block;margin-bottom:8px;text-decoration:none}
+.margin a b{display:block;color:var(--acc);text-decoration:underline}
+.cols{display:grid;grid-template-columns:1fr 1fr;gap:36px}
+ul.l{padding-left:20px;margin:0}ul.l li{margin-bottom:8px}
+.src li{margin-bottom:6px;scroll-margin-top:20px;padding:2px 6px}
+.src li.flash{background:#fff3b0}
+.route{margin-top:34px;padding:14px 16px;background:var(--paper);border-radius:6px;font-size:.92rem;color:var(--mut)}
+.route b{color:var(--ink)}.route .fb{color:var(--warn);font-weight:700}
+.foot{margin-top:28px;color:var(--mut);font-size:.88rem}
+@media(max-width:820px){.facts,.cols{grid-template-columns:1fr}.dev{grid-template-columns:1fr;gap:8px}.demo span{display:none}}
+@page{size:A4;margin:12mm}
+@media print{body{background:#fff;font-size:9.5pt}.noprint{display:none!important}.sheet{border:0;padding:0;margin:0}
+main,.top{max-width:none;padding:0}.dev{grid-template-columns:80px 1fr 200px;break-inside:avoid;padding:8px 0}.snap{font-size:11pt}.head h1{font-size:20pt}h2{margin:12px 0 6px}}
+</style>
+</head>
+<body>
+<header class="top noprint"><span class="brand">Prebrief</span>
+</header>
+<noscript><p style="padding:20px">Prebrief needs JavaScript. Turn it on in your browser and reload.</p></noscript>
+<main>
+<section id="home" class="noprint">
+ <div class="intro">
+  <div id="form">
+   <p class="sentence">Brief me on <input id="name" type="text" placeholder="e.g. Stripe" aria-label="Company or person" autocomplete="off">
+    (<select id="etype" aria-label="Type"><option value="company">company</option><option value="person">person</option></select>)
+    before my <select id="mtype" aria-label="Meeting type"></select> on <input id="time" type="datetime-local" aria-label="Meeting date and time">.</p>
+   <p class="err" id="err" role="alert"></p>
+   <button class="go" id="go" type="button">Build my briefing</button>
+   <p class="try">Try:<button type="button" data-n="Stripe" data-t="company">Stripe</button><button type="button" data-n="Google" data-t="company">Google</button><button type="button" data-n="Satya Nadella" data-t="person">Satya Nadella</button></p>
+  </div>
+  <div id="bad" class="alert bad" role="alert" hidden><span id="badtxt"></span><button class="btn" id="retry" type="button">Try again</button></div>
+ </div>
+ <div class="facts">
+  <div><b>Last 30 days only</b><p>Live web search for launches, hires, funding and news.</p></div>
+  <div><b>Every claim has a source</b><p>Sources sit next to each fact. Nothing is cited that was not found.</p></div>
+  <div><b>Verified or uncertain</b><p>A fact is verified only when two independent sites or an official one confirm it.</p></div>
+ </div>
+</section>
+<section id="load" class="load" hidden aria-live="polite"><h2>Building your briefing</h2><ol class="stages" id="stages"></ol></section>
+<article id="out" class="sheet" hidden></article>
+<p class="foot noprint">Powered by Tavily + Bifrost. Built by Syntax Dynasty for the Global AI Hackathon 2026.</p>
+</main>
+<script>
+// Show any script error on screen instead of failing silently
+window.addEventListener("error", (e) => { const b = document.createElement("div"); b.style.cssText = "position:fixed;left:0;right:0;bottom:0;background:#b3261e;color:#fff;padding:10px 16px;z-index:9"; b.textContent = "Page error: " + e.message; document.body.appendChild(b); });
+// ===== SETTINGS =====
+const API_BASE = location.protocol === "file:" ? "http://localhost:8000" : "";  // opened as a file -> local API; served by the API -> same server
+const TIMEOUT_MS = 120000;
+const TYPES = [["sales","sales call"],["investor","investor meeting"],["partnership","partnership talk"],["interview","interview"],["general","general meeting"]];
+// ===== helpers =====
+const $ = (id) => document.getElementById(id);
+function h(tag, attrs, ...kids) {
+  const n = document.createElement(tag);
+  for (const [k, v] of Object.entries(attrs || {})) {
+    if (k === "class") n.className = v;
+    else if (k.startsWith("on")) n.addEventListener(k.slice(2), v);
+    else if (v !== false && v != null) n.setAttribute(k, v);
+  }
+  kids.flat().forEach((c) => { if (c != null && c !== false) n.append(c.nodeType ? c : document.createTextNode(String(c))); });
+  return n;
+}
+const safeUrl = (u) => { try { const x = new URL(u); return /^https?:$/.test(x.protocol) ? x.href : "#"; } catch { return "#"; } };
+const host = (u) => { try { return new URL(u).hostname.replace(/^www\./, ""); } catch { return ""; } };
+const fmt = (d) => d ? new Date(d + "T00:00:00").toLocaleDateString(undefined, { day: "numeric", month: "short", year: "numeric" }) : "Date unknown";
+const ids = (v) => (Array.isArray(v) ? v : []).map((x) => Number(x && x.id != null ? x.id : x)).filter(Number.isFinite);
+const claims = (v) => (Array.isArray(v) ? v : []).map((x) => typeof x === "string" ? { text: x, ids: [] } : { text: x && x.text, ids: ids(x && x.source_ids) }).filter((x) => x.text);
+
+// ===== normalize: any reasonable API reply -> one shape =====
+function normalize(raw, p) {
+  if (!raw || typeof raw !== "object") throw new Error("The server sent a reply the page cannot read.");
+  const items = raw.key_developments || raw.developments;
+  if (!Array.isArray(items)) throw new Error("The reply has no key_developments list.");
+  const e = typeof raw.entity === "string" ? { name: raw.entity } : raw.entity || {}, m = raw.meeting || {};
+  return {
+    name: e.name || p.name, note: e.disambiguation_note || "", desc: e.description || "",
+    time: m.time || p.meeting_time, type: m.type || p.meeting_type,
+    win: m.window_start && m.window_end ? [m.window_start, m.window_end] : (raw.window ? [raw.window.start, raw.window.end] : null),
+    snapshot: raw.snapshot || "", snapIds: ids(raw.snapshot_source_ids),
+    devs: items.map((d) => {
+      const c = String(d.confidence || "").toLowerCase();
+      return { date: d.date || null, cat: d.category || "update", text: d.text || "", ok: ["verified", "high"].includes(c) && !!d.date, ids: ids(d.source_ids), note: d.note || "" };
+    }),
+    tp: claims(raw.talking_points), risks: claims(raw.risks),
+    qs: (raw.questions || []).map((q) => typeof q === "string" ? q : q && q.text).filter(Boolean),
+    src: (raw.sources || []).map((s, i) => ({ id: Number(s.id) || i + 1, title: s.title || s.url || "Source", url: s.url || "", date: s.published_date || null, domain: s.domain || host(s.url) })),
+    meta: raw.meta || {},
+  };
+}
+
+// ===== screens =====
+function show(v) {
+  $("home").hidden = !(v === "home" || v === "bad");
+  $("load").hidden = v !== "load";
+  $("out").hidden = v !== "out";
+  $("bad").hidden = v !== "bad";
+  $("form").hidden = v === "load";
+}
+let timer = null, tick = null, last = null;
+function startLoad(fast) {
+  const names = ["Searching the last 30 days", "Reading the sources", "Checking each claim", "Writing your briefing"];
+  const ol = $("stages"); ol.replaceChildren(...names.map((n) => h("li", null, n)));
+  let i = 0; const set = () => [...ol.children].forEach((li, k) => { li.className = k < i ? "done" : k === i ? "on" : ""; });
+  set(); show("load"); $("go").disabled = true;
+  timer = setInterval(() => { i = Math.min(i + 1, names.length - 1); set(); }, fast ? 900 : 4000);
+}
+const stopLoad = () => { clearInterval(timer); $("go").disabled = false; };
+
+async function getBriefing(p) {
+  const ctl = new AbortController(), t = setTimeout(() => ctl.abort(), TIMEOUT_MS);
+  try {
+    const r = await fetch(API_BASE + "/generate", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(p), signal: ctl.signal });
+    if (!r.ok) throw new Error(r.status >= 500 ? "The server had a problem. Try again in a moment." : "The request was not accepted (" + r.status + "). Check the name and time.");
+    return normalize(await r.json(), p);
+  } catch (e) {
+    if (e.name === "AbortError") throw new Error("This took too long. Try again.");
+    if (e instanceof TypeError) throw new Error("Cannot reach the server. Check that the API is running and the address is right.");
+    throw e;
+  } finally { clearTimeout(t); }
+}
+
+// ===== briefing =====
+function jump(id) {
+  const li = $("s-" + id); if (!li) return;
+  li.scrollIntoView({ behavior: "smooth", block: "center" });
+  li.classList.add("flash"); setTimeout(() => li.classList.remove("flash"), 1800);
+}
+const cites = (list) => h("span", { class: "cites" }, list.map((n) => h("a", { role: "button", tabindex: "0", "aria-label": "Show source " + n, onclick: () => jump(n), onkeydown: (e) => { if (e.key === "Enter") jump(n); } }, n)));
+const withCites = (text, list) => h("span", null, text, " ", cites(list));
+
+function countdown(node, iso) {
+  const ms = new Date(iso) - new Date();
+  if (isNaN(ms)) return node.textContent = "";
+  if (ms <= 0) return node.textContent = "Meeting has started";
+  const m = Math.floor(ms / 60000);
+  node.textContent = "Starts in " + (m >= 1440 ? Math.floor(m / 1440) + " d " : "") + Math.floor((m % 1440) / 60) + " h " + (m % 60) + " min";
+}
+
+function plain(d) {
+  const L = [d.name + " | pre-meeting briefing", "", d.snapshot, "", "KEY DEVELOPMENTS"];
+  d.devs.forEach((x) => L.push("- " + fmt(x.date) + " (" + (x.ok ? "verified" : "uncertain") + "): " + x.text));
+  L.push("", "TALKING POINTS", ...d.tp.map((x) => "- " + x.text), "", "RISKS", ...d.risks.map((x) => "- " + x.text), "", "QUESTIONS", ...d.qs.map((q) => "- " + q), "", "SOURCES", ...d.src.map((s) => s.id + ". " + s.title + " " + s.url));
+  return L.join("\n");
+}
+
+function render(d) {
+  const root = $("out"); root.replaceChildren(); clearInterval(tick);
+  const nv = d.devs.filter((x) => x.ok).length, byId = Object.fromEntries(d.src.map((s) => [s.id, s]));
+  const copy = h("button", { class: "btn", type: "button", onclick: async () => { try { await navigator.clipboard.writeText(plain(d)); copy.textContent = "Copied"; } catch { copy.textContent = "Copy failed"; } setTimeout(() => copy.textContent = "Copy as text", 1600); } }, "Copy as text");
+  root.append(h("div", { class: "bar noprint" }, h("button", { class: "btn", type: "button", onclick: () => { clearInterval(tick); show("home"); } }, "New briefing"), copy, h("button", { class: "btn p", type: "button", onclick: () => window.print() }, "Save as PDF")));
+
+  const when = h("span"), t = new Date(d.time);
+  root.append(h("header", { class: "head" }, h("h1", null, d.name),
+    d.desc && h("p", { class: "meta" }, d.desc),
+    h("p", { class: "meta" }, isNaN(t) ? "Meeting time not set" : t.toLocaleString(undefined, { dateStyle: "full", timeStyle: "short" }) + " (" + d.type + "). ", when),
+    d.win && h("p", { class: "meta" }, "Covers " + fmt(d.win[0]) + " to " + fmt(d.win[1])),
+    h("p", { class: "tally" }, h("span", { class: "v" }, nv + " verified"), h("span", { class: "u" }, (d.devs.length - nv) + " uncertain"), h("span", null, d.src.length + " sources"))));
+  countdown(when, d.time); tick = setInterval(() => countdown(when, d.time), 60000);
+
+  if (d.note) root.append(h("div", { class: "alert", role: "note" }, "Check the match: " + d.note));
+  if (d.meta.notes) root.append(h("div", { class: "alert", role: "note" }, "Note: " + d.meta.notes));
+
+  root.append(h("h2", null, "Snapshot"), h("p", { class: "snap" }, d.snapshot ? withCites(d.snapshot, d.snapIds) : "No summary available."));
+
+  root.append(h("h2", null, "What changed"));
+  if (!d.devs.length) root.append(h("p", { class: "meta" }, "No supported developments were found for this window. Try a more specific name."));
+  [...d.devs].sort((a, b) => (b.date || "").localeCompare(a.date || "")).forEach((x) => root.append(
+    h("div", { class: "dev" },
+      h("div", { class: "when" }, h("b", null, x.cat), fmt(x.date)),
+      h("div", { class: "claim" + (x.ok ? "" : " u") }, h("p", null, x.text), h("span", { class: "st" }, x.ok ? "\u2714 Verified" : "? Uncertain"),
+        x.note && h("span", { class: "note" }, x.note)),
+      h("div", { class: "margin" }, x.ids.map((n) => byId[n] && h("a", { href: safeUrl(byId[n].url), target: "_blank", rel: "noopener noreferrer" }, h("b", null, n + ". " + (byId[n].domain || host(byId[n].url))), byId[n].title))))));
+
+  const list = (title, arr) => arr.length ? h("section", null, h("h2", null, title), h("ul", { class: "l" }, arr.map((c) => h("li", null, c.ids && c.ids.length ? withCites(c.text, c.ids) : c.text)))) : null;
+  const two = h("div", { class: "cols" }, list("Talking points", d.tp), list("Risks", d.risks));
+  if (two.children.length) root.append(two);
+  const q = list("Questions to ask", d.qs.map((x) => ({ text: x }))); if (q) root.append(q);
+
+  root.append(h("h2", null, "All sources"), h("ol", { class: "src" }, d.src.map((s) => h("li", { id: "s-" + s.id, value: s.id },
+    h("a", { href: safeUrl(s.url), target: "_blank", rel: "noopener noreferrer" }, s.title), " ", h("span", { class: "meta" }, (s.domain ? s.domain + ", " : "") + (s.date ? fmt(s.date) : "no date"))))));
+
+  const m = d.meta, models = Array.isArray(m.models_used) && m.models_used.length ? m.models_used.join(", ") : m.provider_used || "unknown";
+  root.append(h("p", { class: "route" }, "Written by ", h("b", null, models), " through Bifrost", m.latency_seconds != null ? " in " + m.latency_seconds + " s" : "", ". ",
+    m.fallback_used ? h("span", { class: "fb" }, "Fallback model used: the primary model failed and Bifrost switched automatically.") : "Fallback was not needed.", " Search by Tavily."));
+  show("out"); window.scrollTo(0, 0);
+}
+
+// ===== wire up =====
+TYPES.forEach(([v, l]) => $("mtype").append(h("option", { value: v }, l)));
+(() => { const t = new Date(Date.now() + 86400000); t.setHours(10, 0, 0, 0); $("time").value = new Date(t - t.getTimezoneOffset() * 60000).toISOString().slice(0, 16); })();
+document.querySelectorAll(".try button").forEach((b) => b.addEventListener("click", () => { $("name").value = b.dataset.n; $("etype").value = b.dataset.t; }));
+
+async function run(p) {
+  startLoad();
+  try { const d = await getBriefing(p); stopLoad(); render(d); }
+  catch (e) { stopLoad(); $("badtxt").textContent = e.message; show("bad"); }
+}
+// Plain click and Enter handlers (sandboxed viewers block real form submission)
+function submit() {
+  const n = $("name").value.trim(), t = new Date($("time").value);
+  $("err").textContent = n.length < 2 ? "Enter a company or person name (2+ characters)." : isNaN(t) ? "Pick the meeting date and time." : t < new Date() ? "Pick a time in the future." : "";
+  if ($("err").textContent) return;
+  last = { name: n, entity_type: $("etype").value, meeting_time: t.toISOString(), meeting_type: $("mtype").value };
+  run(last);
+}
+$("go").addEventListener("click", submit);
+["name", "time"].forEach((id) => $(id).addEventListener("keydown", (e) => { if (e.key === "Enter") submit(); }));
+$("retry").addEventListener("click", () => last && run(last));
+</script>
+</body>
+</html>
