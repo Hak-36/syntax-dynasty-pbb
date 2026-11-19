@@ -1,13 +1,13 @@
 # Submission checklist
 
-Deadline: (add from the hackathon page)
+Deadline: 22/11/2026
 
 ## Official submission form (confirmed with organizers)
 One project only. It uses both Tavily and Bifrost, so the second-project section stays empty.
 
 | Field | Our answer |
 |---|---|
-| Theme * | (pick on the form) |
+| Theme * | AI Agents & Intelligent Systems |
 | Project Title * | (team decides) |
 | Github link * | https://github.com/Hak-36/syntax-dynasty-pbb |
 | Demo Video Link | (add link after upload) |
