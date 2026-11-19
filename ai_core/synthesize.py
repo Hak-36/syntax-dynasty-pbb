@@ -74,12 +74,12 @@ JSON shape:
   "disambiguation_note": null,
   "snapshot": "max 2 sentences",
   "snapshot_source_ids": [1],
-  "key_developments": [
+    "key_developments": [
     {"date": "YYYY-MM-DD or null", "category": "news|product|leadership|funding|legal|other",
-     "text": "what happened", "source_ids": [1, 2], "note": null}
+     "text": "what happened", "source_ids": [1, 2], "quote": "exact sentence from source", "note": null}
   ],
-  "talking_points": [{"text": "...", "source_ids": [1]}],
-  "risks": [{"text": "...", "source_ids": [1]}],
+  "talking_points": [{"text": "...", "source_ids": [1], "quote": "exact sentence from source"}],
+  "risks": [{"text": "...", "source_ids": [1], "quote": "exact sentence from source"}]
   "questions": ["specific question"]
 }"""
 
@@ -90,12 +90,14 @@ class RawDev(BaseModel):
     category: str = "other"
     text: str
     source_ids: List[int] = Field(default_factory=list)
+    quote: Optional[str] = None
     note: Optional[str] = None
 
 
 class RawClaim(BaseModel):
     text: str
     source_ids: List[int] = Field(default_factory=list)
+    quote: Optional[str] = None
 
 
 class RawBriefing(BaseModel):
@@ -211,6 +213,17 @@ def _prepare_sources(results):
 def _public_source(s, new_id):
     return {"id": new_id, "title": s["title"], "url": s["url"],
             "published_date": s["published_date"], "domain": s["domain"]}
+
+def _has_quote(quote, cited_sources):
+    """Checks if the LLM's quote actually exists in the source text."""
+    if not quote: return False
+    # Normalize whitespace and lowercase for matching
+    q = re.sub(r'\s+', ' ', quote).lower().strip()
+    for s in cited_sources:
+        snippet = re.sub(r'\s+', ' ', s["_snippet"]).lower()
+        if q in snippet:
+            return True
+    return False
 
 
 # ---- Step 2: ask the LLM through Bifrost ----------------------------------

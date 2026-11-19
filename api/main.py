@@ -130,10 +130,11 @@ async def generate(req: GenerateRequest):
         )
 
     # Sources come ONLY from research() output, never from the LLM.
+        # Sources come from the validated draft! (The LLM drops uncited ones)
     sources = [
-        Source(id=i, title=r["title"], url=r["url"],
-               published_date=r["published_date"], domain=r["domain"])
-        for i, r in enumerate(results, start=1)
+        Source(id=s["id"], title=s["title"], url=s["url"],
+               published_date=s["published_date"], domain=s["domain"])
+        for s in draft["sources"]
     ]
 
     response = GenerateResponse(

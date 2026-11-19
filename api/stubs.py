@@ -22,7 +22,8 @@ def research(name, entity_type, meeting_time_iso, days=30):
     ]
 
 
-def synthesize(name, entity_type, meeting_type, results):
+def synthesize(name, entity_type, meeting_type, results, meeting_time=None):
+    # ... existing stub code ...
     # Returns the "writing" parts. The API adds meeting, sources and timing.
     return {
         "entity": {"name": name, "type": entity_type,
