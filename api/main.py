@@ -149,11 +149,11 @@ async def generate(req: GenerateRequest):
         questions=draft["questions"],
         sources=sources,
         meta={"generated_at": now.isoformat(),
-              "models_used": draft["models_used"],
-              "provider_used": draft["provider_used"],
-              "fallback_used": draft["fallback_used"],
+              "models_used": draft["meta"]["models_used"],
+              "provider_used": draft["meta"]["provider_used"],
+              "fallback_used": draft["meta"]["fallback_used"],
               "latency_seconds": round(time.perf_counter() - t0, 3),
-              "notes": draft["notes"]},
+              "notes": draft["meta"]["notes"]},
     )
 
     _cache[key] = (time.time(), response)
