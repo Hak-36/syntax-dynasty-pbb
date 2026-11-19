@@ -37,6 +37,8 @@ from typing import Any, Optional
 from urllib.parse import urlparse
 
 import requests
+from dotenv import load_dotenv
+load_dotenv()
 
 log = logging.getLogger("research")
 

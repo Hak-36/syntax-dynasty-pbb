@@ -21,10 +21,23 @@ MOCK_MODE = os.getenv("MOCK_MODE", "1") == "1"
 TIMEOUT_SECONDS = float(os.getenv("REQUEST_TIMEOUT", "60"))
 CACHE_TTL_SECONDS = 600
 
-if MOCK_MODE:
-    from api.stubs import research, synthesize
-else:
-    raise RuntimeError("Real research/synthesize are not wired yet. Set MOCK_MODE=1.")
+# --- pipeline imports: real if available, else stubs ---
+def _load_pipeline():
+    if MOCK_MODE:
+        from api.stubs import research, synthesize
+        return research, synthesize, True
+
+    try:
+        from research.pipeline import research  # real Tavily research
+        from ai_core.synthesize import synthesize  # real LLM synthesis
+        return research, synthesize, False
+    except Exception as exc:
+        logger.warning("Real pipeline import failed (%r); falling back to stubs.", exc)
+        from api.stubs import research, synthesize
+        return research, synthesize, True
+
+logger = logging.getLogger("briefing")  # move this up before _load_pipeline
+research, synthesize, USING_STUBS = _load_pipeline()
 
 logging.basicConfig(level=logging.INFO, format="%(message)s")
 logger = logging.getLogger("briefing")
