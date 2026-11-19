@@ -161,9 +161,9 @@ async def generate(req: GenerateRequest):
         "event": "generate", "name": req.name, "cached": False,
         "research_s": round(research_s, 3), "synthesize_s": round(synth_s, 3),
         "total_s": round(time.perf_counter() - t0, 3),
-        "n_sources": len(sources), "models_used": draft["models_used"],
-        "provider_used": draft["provider_used"],
-        "fallback_used": draft["fallback_used"],
+        "n_sources": len(sources), "models_used": draft["meta"]["models_used"],
+        "provider_used": draft["meta"]["provider_used"],
+        "fallback_used": draft["meta"]["fallback_used"],
     }))
     return response
 
