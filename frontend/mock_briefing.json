@@ -1,0 +1,40 @@
+{
+  "entity": { "name": "Northwind Payments", "type": "company", "disambiguation_note": null },
+  "meeting": { "time": "2026-11-20T10:00:00.000Z", "type": "sales" },
+  "window": { "start": "2026-10-20", "end": "2026-11-19" },
+  "snapshot": "Northwind Payments launched a new invoicing product and named a new Chief Revenue Officer this month [1][2]. A report of a possible acquisition is not yet confirmed [3].",
+  "key_developments": [
+    { "date": "2026-11-12", "category": "Product", "confidence": "high", "source_ids": [1, 4],
+      "text": "Launched Northwind Invoices, a billing tool for small businesses." },
+    { "date": "2026-11-05", "category": "People", "confidence": "high", "source_ids": [2],
+      "text": "Appointed Dana Okafor as Chief Revenue Officer, joining from a larger payments firm." },
+    { "date": "2026-10-28", "category": "Financials", "confidence": "high", "source_ids": [5],
+      "text": "Reported quarterly revenue growth of 18% compared with the previous quarter." },
+    { "date": "2026-11-09", "category": "Deal", "confidence": "low", "source_ids": [3],
+      "text": "A single blog says Northwind is in talks to be acquired. No other outlet confirms it." },
+    { "date": null, "category": "Partnership", "confidence": "low", "source_ids": [6],
+      "text": "A page mentions a new partnership with a regional bank, but it shows no publish date." }
+  ],
+  "talking_points": [
+    "Congratulate the team on the Northwind Invoices launch and ask how early customers respond.",
+    "Ask how the new CRO plans to change the sales approach for mid-size accounts."
+  ],
+  "risks": [
+    "An acquisition rumour could change priorities or budgets. Treat it as unconfirmed.",
+    "A new leader may re-open existing vendor decisions."
+  ],
+  "questions": [
+    "What is the timeline for rolling Northwind Invoices out beyond small businesses?",
+    "How might the leadership change affect your purchasing process?",
+    "Can you confirm or clarify the partnership with the regional bank?"
+  ],
+  "sources": [
+    { "id": 1, "title": "Northwind launches Invoices", "url": "https://example.com/news/northwind-invoices", "published_date": "2026-11-12" },
+    { "id": 2, "title": "Northwind names new Chief Revenue Officer", "url": "https://example.com/press/northwind-cro", "published_date": "2026-11-05" },
+    { "id": 3, "title": "Is Northwind being acquired? (blog)", "url": "https://example.com/blog/northwind-rumour", "published_date": "2026-11-09" },
+    { "id": 4, "title": "Northwind Invoices: first look", "url": "https://example.com/review/invoices-first-look", "published_date": "2026-11-13" },
+    { "id": 5, "title": "Northwind Q3 results", "url": "https://example.com/finance/northwind-q3", "published_date": "2026-10-28" },
+    { "id": 6, "title": "Regional bank partners list", "url": "https://example.com/partners", "published_date": null }
+  ],
+  "meta": { "provider_used": "openai/gpt-4o-mini", "fallback_used": false, "source_count": 6, "generated_at": "2026-11-19T09:00:00.000Z" }
+}
